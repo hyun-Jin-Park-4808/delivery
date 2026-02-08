@@ -65,3 +65,36 @@ services:
       timeout: 5s
       retries: 10
       start_period: 5s
+
+  order:
+    build:
+      dockerfile: ./apps/order/Dockerfile
+      target: development
+    command: pnpm run start:dev order
+    depends_on:
+      mongo_order:
+        condition: service_healthy
+    env_file:
+      - ./apps/order/.env
+    ports:
+      - "3003:3000"
+    volumes:
+      - .:/user/src/app
+      - /user/src/app/node_modules
+
+  mongo_order:
+    image: mongo:8
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+    ports:
+      - '6003:27017'
+    volumes:
+      - ./mongo/order:/data/lib
+    command: mongod --quiet --logpath /dev/null ## mongodb 실행시킬 때 로그가 너무 많이 나오기 때문에 /dev/null 경로로 logpath 설정하면 로그 자동으로 삭제된다.
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
