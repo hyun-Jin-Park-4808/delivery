@@ -54,6 +54,40 @@ export class AuthService {
     return { email, password };
   }
 
+  async parseBearerToken(rawToken: string, isRefreshToken: boolean) {
+    const basicSplit = rawToken.split(' ');
+
+    if (basicSplit.length !== 2) {
+      throw new BadRequestException('잘못된 토큰 형식입니다.');
+    }
+
+    const [bearer, token] = basicSplit;
+
+    if (bearer.toLowerCase() !== 'bearer') {
+      throw new BadRequestException('잘못된 토큰 형식입니다.');
+    }
+
+    try {
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: isRefreshToken
+          ? this.configService.getOrThrow<string>('REFRESH_TOKEN_SECRET')
+          : this.configService.getOrThrow<string>('ACCESS_TOKEN_SECRET'),
+      });
+      if (isRefreshToken) {
+        if (payload.type !== 'refresh') {
+          throw new BadRequestException('Refresh token을 입력해주세요.');
+        }
+      } else {
+        if (payload.type !== 'access') {
+          throw new BadRequestException('Access token을 입력해주세요.');
+        }
+      }
+      return payload;
+    } catch (error) {
+      throw new BadRequestException('잘못된 토큰입니다.');
+    }
+  }
+
   async login(rawToken: string) {
     const { email, password } = this.parseBasicToken(rawToken);
     const user = await this.authentication(email, password);

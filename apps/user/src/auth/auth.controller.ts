@@ -9,6 +9,8 @@ import {
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register-dto';
 import { Authorization } from './decorator/authorization.decorator';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { ParseBearerTokenDto } from './dto/parse-bearer-token.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -34,5 +36,14 @@ export class AuthController {
     }
 
     return this.authService.login(token);
+  }
+
+  @MessagePattern({
+    cmd: 'parse_bearer_token',
+  }) // 응답을 줄 수 있다., @EventPattern() 이벤트를 던지기만 한다.
+  @UsePipes(ValidationPipe)
+  parseBearerToken(@Payload() payload: ParseBearerTokenDto) {
+    console.log('Request received');
+    return this.authService.parseBearerToken(payload.token, false);
   }
 }
