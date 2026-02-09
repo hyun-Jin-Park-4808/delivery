@@ -7,8 +7,8 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { EventPattern, Payload } from '@nestjs/microservices';
-import { Authorization } from 'apps/user/src/auth/decorator/authorization.decorator';
+import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
+import { Authorization } from 'apps/gateway/src/auth/decorator/authorization.decorator';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { DeliveryStartedDto } from './dto/delivery-started.dto';
 import { OrderStatus } from './entity/order.entity';
@@ -18,14 +18,14 @@ import { OrderService } from './order.service';
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
-  @Post()
-  @UsePipes(ValidationPipe)
-  async createOrder(
-    @Authorization() token: string,
-    @Body() createOrderDto: CreateOrderDto,
-  ) {
-    return this.orderService.createOrder(token, createOrderDto);
-  }
+  // @Post()
+  // @UsePipes(ValidationPipe)
+  // async createOrder(
+  //   @Authorization() token: string,
+  //   @Body() createOrderDto: CreateOrderDto,
+  // ) {
+  //   return this.orderService.createOrder(token, createOrderDto);
+  // }
 
   @EventPattern({ cmd: 'delivery_started' })
   @UseInterceptors(RpcInterceptor)
@@ -34,5 +34,10 @@ export class OrderController {
       payload.id,
       OrderStatus.deliveryStarted,
     );
+  }
+
+  @MessagePattern({ cmd: 'create_order' })
+  async createOrder(@Payload() payload: CreateOrderDto) {
+    return this.orderService.createOrder(payload);
   }
 }

@@ -15,6 +15,5 @@ async function bootstrap() {
   });
 
   await app.startAllMicroservices(); // microservice들을 실행하겠다.
-  await app.listen(process.env.HTTP_PORT ?? 3000);
 }
 bootstrap();

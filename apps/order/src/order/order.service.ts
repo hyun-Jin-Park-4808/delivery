@@ -25,11 +25,11 @@ export class OrderService {
     @InjectModel(Order.name)
     private readonly orderModel: Model<Order>,
   ) {}
-  async createOrder(token: string, createOrderDto: CreateOrderDto) {
-    const { productIds, address, payment } = createOrderDto;
+  async createOrder(createOrderDto: CreateOrderDto) {
+    const { meta, productIds, address, payment } = createOrderDto;
 
     // 1) 사용자 정보 가져오기
-    const user = await this.getUserFromToken(token);
+    const user = await this.getUserFromToken(meta.user.sub);
 
     // 2) 상품 정보 가져오기
     const products = await this.getProductsByIds(productIds);
@@ -56,19 +56,19 @@ export class OrderService {
     return this.orderModel.findById(order._id);
   }
 
-  private async getUserFromToken(token: string) {
-    // 1) User MS: JWT 토큰 검증
-    const tokenResp = await lastValueFrom(
-      // RxJS의 Observable을 Promise로 바꿔주는 함수, Observable을 Promise로 변환하여 await 가능하게 만듦
-      this.userService.send({ cmd: 'parse_bearer_token' }, { token }),
-    ); // send(): messagePattern을 사용, emit(): eventPattern을 사용
+  private async getUserFromToken(userId: string) {
+    // // 1) User MS: JWT 토큰 검증
+    // const tokenResp = await lastValueFrom(
+    //   // RxJS의 Observable을 Promise로 바꿔주는 함수, Observable을 Promise로 변환하여 await 가능하게 만듦
+    //   this.userService.send({ cmd: 'parse_bearer_token' }, { token }),
+    // ); // send(): messagePattern을 사용, emit(): eventPattern을 사용
 
-    if (tokenResp.status === 'error') {
-      throw new PaymentCancelledException(tokenResp);
-    }
+    // if (tokenResp.status === 'error') {
+    //   throw new PaymentCancelledException(tokenResp);
+    // }
 
-    // 2) User MS; 사용자 정보 가져오기
-    const userId = tokenResp.data.sub;
+    // // 2) User MS; 사용자 정보 가져오기
+    // const userId = tokenResp.data.sub;
     const userResp = await lastValueFrom(
       this.userService.send({ cmd: 'get_user_info' }, { userId }),
     );

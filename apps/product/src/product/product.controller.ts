@@ -14,7 +14,9 @@ import { GetProductsInfoDto } from './dto/get-products-info.dto';
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  @Post('sample')
+  @MessagePattern('create_samples')
+  @UsePipes(ValidationPipe)
+  @UseInterceptors(RpcInterceptor)
   async createSamples() {
     return this.productService.createSamples();
   }
