@@ -3,6 +3,7 @@ import {
   Controller,
   Post,
   UnauthorizedException,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -11,6 +12,7 @@ import { RegisterDto } from './dto/register-dto';
 import { Authorization } from './decorator/authorization.decorator';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { ParseBearerTokenDto } from './dto/parse-bearer-token.dto';
+import { RpcInterceptor } from '@app/common';
 
 @Controller('auth')
 export class AuthController {
@@ -42,8 +44,8 @@ export class AuthController {
     cmd: 'parse_bearer_token',
   }) // 응답을 줄 수 있다., @EventPattern() 이벤트를 던지기만 한다.
   @UsePipes(ValidationPipe)
+  @UseInterceptors(RpcInterceptor)
   parseBearerToken(@Payload() payload: ParseBearerTokenDto) {
-    console.log('Request received');
     return this.authService.parseBearerToken(payload.token, false);
   }
 }

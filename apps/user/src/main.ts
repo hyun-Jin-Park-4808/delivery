@@ -10,7 +10,7 @@ async function bootstrap() {
     transport: Transport.TCP, // 어떤 방식으로 microservice들을 통신할 것인지
     options: {
       host: '0.0.0.0', // 모든 곳에서 통신을 다 받겠다.
-      port: Number(process.env.TCP_PORT) ?? 6001,
+      port: Number(process.env.TCP_PORT ?? 3001), // 도커 내의 포트
     },
   });
 

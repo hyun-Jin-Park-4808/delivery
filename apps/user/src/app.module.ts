@@ -14,6 +14,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         ACCESS_TOKEN_SECRET: Joi.string().required(),
         HTTP_PORT: Joi.number().required(),
         DB_URL: Joi.string().required(),
+        TCP_PORT: Joi.number().required(),
       }),
     }),
     TypeOrmModule.forRootAsync({

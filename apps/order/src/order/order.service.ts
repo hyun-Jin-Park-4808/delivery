@@ -1,34 +1,178 @@
+import { PAYMENT_SERVICE, PRODUCT_SERVICE, USER_SERVICE } from '@app/common';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { CreateOrderDto } from './dto/create-order.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { lastValueFrom } from 'rxjs';
-import { USER_SERVICE } from '@app/common';
+import { AddressDto } from './dto/address.dto';
+import { CreateOrderDto } from './dto/create-order.dto';
+import { PaymentDto } from './dto/payment.dto';
+import { Customer } from './entity/customer.entity';
+import { Order, OrderStatus } from './entity/order.entity';
+import { Product } from './entity/product.entity';
+import { PaymentCancelledException } from './exception/payment-cancelled.exception';
+import { PaymentFailedException } from './exception/payment-failed.exception';
 
 @Injectable()
 export class OrderService {
   constructor(
     @Inject(USER_SERVICE)
     private readonly userService: ClientProxy,
+    @Inject(PRODUCT_SERVICE)
+    private readonly productService: ClientProxy,
+    @Inject(PAYMENT_SERVICE)
+    private readonly paymentService: ClientProxy,
+    @InjectModel(Order.name)
+    private readonly orderModel: Model<Order>,
   ) {}
   async createOrder(token: string, createOrderDto: CreateOrderDto) {
+    const { productIds, address, payment } = createOrderDto;
+
     // 1) 사용자 정보 가져오기
     const user = await this.getUserFromToken(token);
+
     // 2) 상품 정보 가져오기
+    const products = await this.getProductsByIds(productIds);
+
     // 3) 총 금액 계산하기
+    const totalAmount = this.calculateTotalAmount(products);
+
     // 4) 금액 검증하기 - total 맞는지(프론트에서 보내준 데이터랑)
+    this.validatePaymentAmount(totalAmount, payment.amount);
+
     // 5) 주문 생성하기
-    // 6) 결제 시도하기
-    // 7) 주문 상태 업데이트하기
-    // 8) 결과 반환하기
+    const customer = this.createCustomer(user);
+    const order = await this.createNewOrder(
+      customer,
+      products,
+      address,
+      payment,
+    );
+
+    // 6) 결제 시도하기, 주문 상태 업데이트
+    await this.processPayment(order._id.toString(), payment, user.email);
+
+    // 7) 결과 반환하기
+    return this.orderModel.findById(order._id);
   }
 
   private async getUserFromToken(token: string) {
     // 1) User MS: JWT 토큰 검증
-    const resp = await lastValueFrom(
+    const tokenResp = await lastValueFrom(
+      // RxJS의 Observable을 Promise로 바꿔주는 함수, Observable을 Promise로 변환하여 await 가능하게 만듦
       this.userService.send({ cmd: 'parse_bearer_token' }, { token }),
     ); // send(): messagePattern을 사용, emit(): eventPattern을 사용
-    console.log(resp);
+
+    if (tokenResp.status === 'error') {
+      throw new PaymentCancelledException(tokenResp);
+    }
 
     // 2) User MS; 사용자 정보 가져오기
+    const userId = tokenResp.data.sub;
+    const userResp = await lastValueFrom(
+      this.userService.send({ cmd: 'get_user_info' }, { userId }),
+    );
+
+    if (userResp.status === 'error') {
+      throw new PaymentCancelledException(userResp);
+    }
+
+    return userResp.data;
+  }
+
+  private async getProductsByIds(productIds: string[]): Promise<Product[]> {
+    const resp = await lastValueFrom(
+      this.productService.send({ cmd: 'get_products_info' }, { productIds }),
+    );
+
+    if (resp.status === 'error') {
+      throw new PaymentCancelledException('상품 정보가 잘못됐습니다.');
+    }
+
+    // Product entity로 전환
+    return resp.data.map((product) => ({
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+    }));
+  }
+
+  private calculateTotalAmount(products: Product[]) {
+    return products.reduce(
+      (total, currentProduct) => total + currentProduct.price,
+      0,
+    );
+  }
+
+  private validatePaymentAmount(totalA: number, totalB: number) {
+    if (totalA !== totalB) {
+      throw new PaymentCancelledException('결제하려는 금액이 변경되었습니다.');
+    }
+  }
+
+  private createCustomer(user: { id: string; email: string; name: string }) {
+    return {
+      userId: user.id,
+      name: user.name,
+      email: user.email,
+    };
+  }
+
+  private async createNewOrder(
+    customer: Customer,
+    products: Product[],
+    deliveryAddress: AddressDto,
+    payment: PaymentDto,
+  ) {
+    return await this.orderModel.create({
+      customer,
+      products,
+      deliveryAddress,
+      payment,
+    });
+  }
+
+  private async processPayment(
+    orderId: string,
+    payment: PaymentDto,
+    userEmail: string,
+  ) {
+    try {
+      const resp = await lastValueFrom(
+        this.paymentService.send(
+          { cmd: 'make_payment' },
+          { ...payment, userEmail, orderId },
+        ),
+      );
+
+      if (resp.status === 'error') {
+        throw new PaymentFailedException(resp);
+      }
+
+      const isPaid = resp.data.paymentStatus === 'Approved';
+      const orderStatus = isPaid
+        ? OrderStatus.paymentProcessed
+        : OrderStatus.paymentFailed;
+
+      if (orderStatus === OrderStatus.paymentFailed) {
+        throw new PaymentFailedException(resp);
+      }
+
+      await this.orderModel.findByIdAndUpdate(orderId, {
+        status: OrderStatus.paymentProcessed,
+      });
+      return resp;
+    } catch (error) {
+      if (error instanceof PaymentFailedException) {
+        await this.orderModel.findByIdAndUpdate(orderId, {
+          status: OrderStatus.paymentFailed,
+        });
+      }
+      throw new PaymentFailedException(error);
+    }
+  }
+
+  changeOrderStatus(orderId: string, status: OrderStatus) {
+    return this.orderModel.findByIdAndUpdate(orderId, { status });
   }
 }

@@ -12,6 +12,7 @@ import { ProductModule } from './product/product.module';
       validationSchema: Joi.object({
         HTTP_PORT: Joi.string().required(),
         DB_URL: Joi.string().required(),
+        TCP_PORT: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRootAsync({

@@ -12,6 +12,14 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
+  async getUserById(userId: string) {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new BadRequestException('존재하지 않는 사용자입니다.');
+    }
+    return user;
+  }
+
   async create(createUserDto: CreateUserDto) {
     const { email, password } = createUserDto;
     const user = await this.userRepository.findOne({ where: { email } });
