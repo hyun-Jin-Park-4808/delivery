@@ -29,12 +29,15 @@ import { BearerTokenMiddleware } from './auth/middleware/bearer-token.middleware
     ClientsModule.registerAsync({
       clients: [
         {
-          name: USER_SERVICE, // 통신할 서비스 이름, @Inject(name)으로 주입받음.
+          name: USER_SERVICE, // 통신할 서비스 이름, @Inject(name)으로 IoC 컨테이너에 주입받을 이름
           useFactory: (configService: ConfigService) => ({
-            transport: Transport.REDIS,
+            transport: Transport.RMQ,
             options: {
-              host: 'redis',
-              port: 6379,
+              urls: ['amqp://rabbitmq:5672'],
+              queue: 'user_queue', // 메시지를 담아놓을 큐의 이름, 같은 큐 안에서만 메세지 전달이 이뤄진다.
+              queueOptions: {
+                durable: false, // 큐를 RAM(메모리)에만 저장, 휘발성, 개발/테스트/임시데이터 등 중요하지 않는 데이터 보관할 때만 false로 설정
+              },
             },
           }),
           inject: [ConfigService],
@@ -42,10 +45,13 @@ import { BearerTokenMiddleware } from './auth/middleware/bearer-token.middleware
         {
           name: PRODUCT_SERVICE,
           useFactory: (configService: ConfigService) => ({
-            transport: Transport.REDIS,
+            transport: Transport.RMQ,
             options: {
-              host: 'redis',
-              port: 6379,
+              urls: ['amqp://rabbitmq:5672'],
+              queue: 'product_queue',
+              queueOptions: {
+                durable: false,
+              },
             },
           }),
           inject: [ConfigService],
@@ -53,10 +59,13 @@ import { BearerTokenMiddleware } from './auth/middleware/bearer-token.middleware
         {
           name: ORDER_SERVICE,
           useFactory: (configService: ConfigService) => ({
-            transport: Transport.REDIS,
+            transport: Transport.RMQ,
             options: {
-              host: 'redis',
-              port: 6379,
+              urls: ['amqp://rabbitmq:5672'],
+              queue: 'order_queue',
+              queueOptions: {
+                durable: false,
+              },
             },
           }),
           inject: [ConfigService],

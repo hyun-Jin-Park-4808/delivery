@@ -26,10 +26,13 @@ import { ORDER_SERVICE } from '@app/common';
         {
           name: ORDER_SERVICE, // 통신할 서비스 이름, @Inject(name)으로 주입받음.
           useFactory: (configService: ConfigService) => ({
-            transport: Transport.REDIS,
+            transport: Transport.RMQ,
             options: {
-              host: 'redis',
-              port: 6379,
+              urls: ['amqp://rabbitmq:5672'],
+              queue: 'order_queue',
+              queueOptions: {
+                durable: false,
+              },
             },
           }),
           inject: [ConfigService],

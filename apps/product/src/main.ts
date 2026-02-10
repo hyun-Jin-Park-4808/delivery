@@ -7,10 +7,13 @@ async function bootstrap() {
 
   app.connectMicroservice<MicroserviceOptions>({
     // microservice를 연결
-    transport: Transport.REDIS, // 어떤 방식으로 microservice들을 통신할 것인지
+    transport: Transport.RMQ, // 어떤 방식으로 microservice들을 통신할 것인지
     options: {
-      host: 'redis', // 모든 곳에서 통신을 다 받겠다.
-      port: 6379, // 도커 내의 포트
+      urls: ['amqp://rabbitmq:5672'],
+      queue: 'product_queue',
+      queueOptions: {
+        durable: false,
+      },
     },
   });
 
