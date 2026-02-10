@@ -33,10 +33,10 @@ import { PAYMENT_SERVICE, PRODUCT_SERVICE, USER_SERVICE } from '@app/common';
         {
           name: USER_SERVICE, // 통신할 서비스 이름, @Inject(name)으로 주입받음.
           useFactory: (configService: ConfigService) => ({
-            transport: Transport.TCP,
+            transport: Transport.REDIS,
             options: {
-              host: configService.getOrThrow<string>('USER_HOST'),
-              port: configService.getOrThrow<number>('USER_TCP_PORT'),
+              host: 'redis',
+              port: 6379,
             },
           }),
           inject: [ConfigService],
@@ -44,10 +44,10 @@ import { PAYMENT_SERVICE, PRODUCT_SERVICE, USER_SERVICE } from '@app/common';
         {
           name: PRODUCT_SERVICE,
           useFactory: (configService: ConfigService) => ({
-            transport: Transport.TCP,
+            transport: Transport.REDIS,
             options: {
-              host: configService.getOrThrow<string>('PRODUCT_HOST'),
-              port: configService.getOrThrow<number>('PRODUCT_TCP_PORT'),
+              host: 'redis',
+              port: 6379,
             },
           }),
           inject: [ConfigService],
@@ -55,10 +55,10 @@ import { PAYMENT_SERVICE, PRODUCT_SERVICE, USER_SERVICE } from '@app/common';
         {
           name: PAYMENT_SERVICE,
           useFactory: (configService: ConfigService) => ({
-            transport: Transport.TCP,
+            transport: Transport.REDIS,
             options: {
-              host: configService.getOrThrow<string>('PAYMENT_HOST'),
-              port: configService.getOrThrow<number>('PAYMENT_TCP_PORT'),
+              host: 'redis',
+              port: 6379,
             },
           }),
           inject: [ConfigService],
