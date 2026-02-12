@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package product;
+
+service ProductService {
+    rpc CreateSamples(CreateSamplesRequest) returns (CreateSamplesResponse); 
+    rpc GetProductInfo(GetProductInfoRequest) returns (GetProductInfoResponse);
+}
+
+// 아무 값도 안넣더라도 message request는 무조건 만들어야 한다.
+// input params이 없더라도, message request를 만드는 게 확장성이 더 있기 때문이다. 
+message CreateSamplesRequest {
+}
+
+message CreateSamplesResponse {
+    bool success = 1;
+}
+
+message GetProductInfoRequest {
+    repeated string productIds = 1;
+}
+
+message GetProductInfoResponse {
+    message ProductInfo {
+        string id = 1;
+        string name = 2;
+        int32 price = 3;
+        string description = 4;
+        string image = 5;
+    }
+    repeated ProductInfo productInfos = 1; // productInfo[]
+}
