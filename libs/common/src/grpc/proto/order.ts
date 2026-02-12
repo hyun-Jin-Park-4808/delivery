@@ -1285,8 +1285,8 @@ export const CreateOrderResponse_Payment: MessageFns<CreateOrderResponse_Payment
 };
 
 export interface OrderService {
-  DeliveryStarted(request: DeliveryStartedRequest, metadata?: Metadata): Promise<DeliveryStartedResponse>;
-  CreateOrder(request: CreateOrderRequest, metadata?: Metadata): Promise<CreateOrderResponse>;
+  deliveryStarted(request: DeliveryStartedRequest, metadata?: Metadata): Promise<DeliveryStartedResponse>;
+  createOrder(request: CreateOrderRequest, metadata?: Metadata): Promise<CreateOrderResponse>;
 }
 
 export const OrderServiceServiceName = "order.OrderService";
@@ -1296,16 +1296,16 @@ export class OrderServiceClientImpl implements OrderService {
   constructor(rpc: Rpc, opts?: { service?: string }) {
     this.service = opts?.service || OrderServiceServiceName;
     this.rpc = rpc;
-    this.DeliveryStarted = this.DeliveryStarted.bind(this);
-    this.CreateOrder = this.CreateOrder.bind(this);
+    this.deliveryStarted = this.deliveryStarted.bind(this);
+    this.createOrder = this.createOrder.bind(this);
   }
-  DeliveryStarted(request: DeliveryStartedRequest, metadata?: Metadata): Promise<DeliveryStartedResponse> {
+  deliveryStarted(request: DeliveryStartedRequest, metadata?: Metadata): Promise<DeliveryStartedResponse> {
     const data = DeliveryStartedRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "DeliveryStarted", data, metadata);
     return promise.then((data) => DeliveryStartedResponse.decode(new BinaryReader(data)));
   }
 
-  CreateOrder(request: CreateOrderRequest, metadata?: Metadata): Promise<CreateOrderResponse> {
+  createOrder(request: CreateOrderRequest, metadata?: Metadata): Promise<CreateOrderResponse> {
     const data = CreateOrderRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "CreateOrder", data, metadata);
     return promise.then((data) => CreateOrderResponse.decode(new BinaryReader(data)));

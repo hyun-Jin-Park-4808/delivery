@@ -5,10 +5,10 @@
 // source: proto/user.proto
 
 /* eslint-disable */
-import { BinaryReader, BinaryWriter } from '@bufbuild/protobuf/wire';
-import type { Metadata } from '@grpc/grpc-js';
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+import type { Metadata } from "@grpc/grpc-js";
 
-export const protobufPackage = 'user';
+export const protobufPackage = "user";
 
 /** 원래는 Protobuf 만들고 typescript, Java 등 다른 언어로 변환하는 것이 정석 */
 
@@ -57,26 +57,19 @@ export interface GetUserInfoResponse {
 }
 
 function createBaseParseBearerTokenRequest(): ParseBearerTokenRequest {
-  return { token: '' };
+  return { token: "" };
 }
 
 export const ParseBearerTokenRequest: MessageFns<ParseBearerTokenRequest> = {
-  encode(
-    message: ParseBearerTokenRequest,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
-    if (message.token !== '') {
+  encode(message: ParseBearerTokenRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.token !== "") {
       writer.uint32(10).string(message.token);
     }
     return writer;
   },
 
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number,
-  ): ParseBearerTokenRequest {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ParseBearerTokenRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParseBearerTokenRequest();
     while (reader.pos < end) {
@@ -100,54 +93,41 @@ export const ParseBearerTokenRequest: MessageFns<ParseBearerTokenRequest> = {
   },
 
   fromJSON(object: any): ParseBearerTokenRequest {
-    return {
-      token: isSet(object.token) ? globalThis.String(object.token) : '',
-    };
+    return { token: isSet(object.token) ? globalThis.String(object.token) : "" };
   },
 
   toJSON(message: ParseBearerTokenRequest): unknown {
     const obj: any = {};
-    if (message.token !== '') {
+    if (message.token !== "") {
       obj.token = message.token;
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ParseBearerTokenRequest>, I>>(
-    base?: I,
-  ): ParseBearerTokenRequest {
+  create<I extends Exact<DeepPartial<ParseBearerTokenRequest>, I>>(base?: I): ParseBearerTokenRequest {
     return ParseBearerTokenRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ParseBearerTokenRequest>, I>>(
-    object: I,
-  ): ParseBearerTokenRequest {
+  fromPartial<I extends Exact<DeepPartial<ParseBearerTokenRequest>, I>>(object: I): ParseBearerTokenRequest {
     const message = createBaseParseBearerTokenRequest();
-    message.token = object.token ?? '';
+    message.token = object.token ?? "";
     return message;
   },
 };
 
 function createBaseParseBearerTokenResponse(): ParseBearerTokenResponse {
-  return { sub: '' };
+  return { sub: "" };
 }
 
 export const ParseBearerTokenResponse: MessageFns<ParseBearerTokenResponse> = {
-  encode(
-    message: ParseBearerTokenResponse,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
-    if (message.sub !== '') {
+  encode(message: ParseBearerTokenResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.sub !== "") {
       writer.uint32(10).string(message.sub);
     }
     return writer;
   },
 
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number,
-  ): ParseBearerTokenResponse {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ParseBearerTokenResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseParseBearerTokenResponse();
     while (reader.pos < end) {
@@ -171,61 +151,50 @@ export const ParseBearerTokenResponse: MessageFns<ParseBearerTokenResponse> = {
   },
 
   fromJSON(object: any): ParseBearerTokenResponse {
-    return { sub: isSet(object.sub) ? globalThis.String(object.sub) : '' };
+    return { sub: isSet(object.sub) ? globalThis.String(object.sub) : "" };
   },
 
   toJSON(message: ParseBearerTokenResponse): unknown {
     const obj: any = {};
-    if (message.sub !== '') {
+    if (message.sub !== "") {
       obj.sub = message.sub;
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ParseBearerTokenResponse>, I>>(
-    base?: I,
-  ): ParseBearerTokenResponse {
+  create<I extends Exact<DeepPartial<ParseBearerTokenResponse>, I>>(base?: I): ParseBearerTokenResponse {
     return ParseBearerTokenResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ParseBearerTokenResponse>, I>>(
-    object: I,
-  ): ParseBearerTokenResponse {
+  fromPartial<I extends Exact<DeepPartial<ParseBearerTokenResponse>, I>>(object: I): ParseBearerTokenResponse {
     const message = createBaseParseBearerTokenResponse();
-    message.sub = object.sub ?? '';
+    message.sub = object.sub ?? "";
     return message;
   },
 };
 
 function createBaseRegisterUserRequest(): RegisterUserRequest {
-  return { token: '', name: '', age: 0, profile: '' };
+  return { token: "", name: "", age: 0, profile: "" };
 }
 
 export const RegisterUserRequest: MessageFns<RegisterUserRequest> = {
-  encode(
-    message: RegisterUserRequest,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
-    if (message.token !== '') {
+  encode(message: RegisterUserRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.token !== "") {
       writer.uint32(10).string(message.token);
     }
-    if (message.name !== '') {
+    if (message.name !== "") {
       writer.uint32(18).string(message.name);
     }
     if (message.age !== 0) {
       writer.uint32(24).int32(message.age);
     }
-    if (message.profile !== '') {
+    if (message.profile !== "") {
       writer.uint32(34).string(message.profile);
     }
     return writer;
   },
 
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number,
-  ): RegisterUserRequest {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): RegisterUserRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRegisterUserRequest();
     while (reader.pos < end) {
@@ -274,80 +243,69 @@ export const RegisterUserRequest: MessageFns<RegisterUserRequest> = {
 
   fromJSON(object: any): RegisterUserRequest {
     return {
-      token: isSet(object.token) ? globalThis.String(object.token) : '',
-      name: isSet(object.name) ? globalThis.String(object.name) : '',
+      token: isSet(object.token) ? globalThis.String(object.token) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
       age: isSet(object.age) ? globalThis.Number(object.age) : 0,
-      profile: isSet(object.profile) ? globalThis.String(object.profile) : '',
+      profile: isSet(object.profile) ? globalThis.String(object.profile) : "",
     };
   },
 
   toJSON(message: RegisterUserRequest): unknown {
     const obj: any = {};
-    if (message.token !== '') {
+    if (message.token !== "") {
       obj.token = message.token;
     }
-    if (message.name !== '') {
+    if (message.name !== "") {
       obj.name = message.name;
     }
     if (message.age !== 0) {
       obj.age = Math.round(message.age);
     }
-    if (message.profile !== '') {
+    if (message.profile !== "") {
       obj.profile = message.profile;
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RegisterUserRequest>, I>>(
-    base?: I,
-  ): RegisterUserRequest {
+  create<I extends Exact<DeepPartial<RegisterUserRequest>, I>>(base?: I): RegisterUserRequest {
     return RegisterUserRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RegisterUserRequest>, I>>(
-    object: I,
-  ): RegisterUserRequest {
+  fromPartial<I extends Exact<DeepPartial<RegisterUserRequest>, I>>(object: I): RegisterUserRequest {
     const message = createBaseRegisterUserRequest();
-    message.token = object.token ?? '';
-    message.name = object.name ?? '';
+    message.token = object.token ?? "";
+    message.name = object.name ?? "";
     message.age = object.age ?? 0;
-    message.profile = object.profile ?? '';
+    message.profile = object.profile ?? "";
     return message;
   },
 };
 
 function createBaseRegisterUserResponse(): RegisterUserResponse {
-  return { id: '', email: '', name: '', age: 0, profile: '' };
+  return { id: "", email: "", name: "", age: 0, profile: "" };
 }
 
 export const RegisterUserResponse: MessageFns<RegisterUserResponse> = {
-  encode(
-    message: RegisterUserResponse,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
-    if (message.id !== '') {
+  encode(message: RegisterUserResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.email !== '') {
+    if (message.email !== "") {
       writer.uint32(18).string(message.email);
     }
-    if (message.name !== '') {
+    if (message.name !== "") {
       writer.uint32(26).string(message.name);
     }
     if (message.age !== 0) {
       writer.uint32(32).int32(message.age);
     }
-    if (message.profile !== '') {
+    if (message.profile !== "") {
       writer.uint32(42).string(message.profile);
     }
     return writer;
   },
 
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number,
-  ): RegisterUserResponse {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): RegisterUserResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRegisterUserResponse();
     while (reader.pos < end) {
@@ -404,70 +362,62 @@ export const RegisterUserResponse: MessageFns<RegisterUserResponse> = {
 
   fromJSON(object: any): RegisterUserResponse {
     return {
-      id: isSet(object.id) ? globalThis.String(object.id) : '',
-      email: isSet(object.email) ? globalThis.String(object.email) : '',
-      name: isSet(object.name) ? globalThis.String(object.name) : '',
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
+      email: isSet(object.email) ? globalThis.String(object.email) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
       age: isSet(object.age) ? globalThis.Number(object.age) : 0,
-      profile: isSet(object.profile) ? globalThis.String(object.profile) : '',
+      profile: isSet(object.profile) ? globalThis.String(object.profile) : "",
     };
   },
 
   toJSON(message: RegisterUserResponse): unknown {
     const obj: any = {};
-    if (message.id !== '') {
+    if (message.id !== "") {
       obj.id = message.id;
     }
-    if (message.email !== '') {
+    if (message.email !== "") {
       obj.email = message.email;
     }
-    if (message.name !== '') {
+    if (message.name !== "") {
       obj.name = message.name;
     }
     if (message.age !== 0) {
       obj.age = Math.round(message.age);
     }
-    if (message.profile !== '') {
+    if (message.profile !== "") {
       obj.profile = message.profile;
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RegisterUserResponse>, I>>(
-    base?: I,
-  ): RegisterUserResponse {
+  create<I extends Exact<DeepPartial<RegisterUserResponse>, I>>(base?: I): RegisterUserResponse {
     return RegisterUserResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RegisterUserResponse>, I>>(
-    object: I,
-  ): RegisterUserResponse {
+  fromPartial<I extends Exact<DeepPartial<RegisterUserResponse>, I>>(object: I): RegisterUserResponse {
     const message = createBaseRegisterUserResponse();
-    message.id = object.id ?? '';
-    message.email = object.email ?? '';
-    message.name = object.name ?? '';
+    message.id = object.id ?? "";
+    message.email = object.email ?? "";
+    message.name = object.name ?? "";
     message.age = object.age ?? 0;
-    message.profile = object.profile ?? '';
+    message.profile = object.profile ?? "";
     return message;
   },
 };
 
 function createBaseLoginUserRequest(): LoginUserRequest {
-  return { token: '' };
+  return { token: "" };
 }
 
 export const LoginUserRequest: MessageFns<LoginUserRequest> = {
-  encode(
-    message: LoginUserRequest,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
-    if (message.token !== '') {
+  encode(message: LoginUserRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.token !== "") {
       writer.uint32(10).string(message.token);
     }
     return writer;
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): LoginUserRequest {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseLoginUserRequest();
     while (reader.pos < end) {
@@ -491,54 +441,44 @@ export const LoginUserRequest: MessageFns<LoginUserRequest> = {
   },
 
   fromJSON(object: any): LoginUserRequest {
-    return {
-      token: isSet(object.token) ? globalThis.String(object.token) : '',
-    };
+    return { token: isSet(object.token) ? globalThis.String(object.token) : "" };
   },
 
   toJSON(message: LoginUserRequest): unknown {
     const obj: any = {};
-    if (message.token !== '') {
+    if (message.token !== "") {
       obj.token = message.token;
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<LoginUserRequest>, I>>(
-    base?: I,
-  ): LoginUserRequest {
+  create<I extends Exact<DeepPartial<LoginUserRequest>, I>>(base?: I): LoginUserRequest {
     return LoginUserRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<LoginUserRequest>, I>>(
-    object: I,
-  ): LoginUserRequest {
+  fromPartial<I extends Exact<DeepPartial<LoginUserRequest>, I>>(object: I): LoginUserRequest {
     const message = createBaseLoginUserRequest();
-    message.token = object.token ?? '';
+    message.token = object.token ?? "";
     return message;
   },
 };
 
 function createBaseLoginUserResponse(): LoginUserResponse {
-  return { refreshToken: '', accessToken: '' };
+  return { refreshToken: "", accessToken: "" };
 }
 
 export const LoginUserResponse: MessageFns<LoginUserResponse> = {
-  encode(
-    message: LoginUserResponse,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
-    if (message.refreshToken !== '') {
+  encode(message: LoginUserResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.refreshToken !== "") {
       writer.uint32(10).string(message.refreshToken);
     }
-    if (message.accessToken !== '') {
+    if (message.accessToken !== "") {
       writer.uint32(18).string(message.accessToken);
     }
     return writer;
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): LoginUserResponse {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseLoginUserResponse();
     while (reader.pos < end) {
@@ -571,62 +511,47 @@ export const LoginUserResponse: MessageFns<LoginUserResponse> = {
 
   fromJSON(object: any): LoginUserResponse {
     return {
-      refreshToken: isSet(object.refreshToken)
-        ? globalThis.String(object.refreshToken)
-        : '',
-      accessToken: isSet(object.accessToken)
-        ? globalThis.String(object.accessToken)
-        : '',
+      refreshToken: isSet(object.refreshToken) ? globalThis.String(object.refreshToken) : "",
+      accessToken: isSet(object.accessToken) ? globalThis.String(object.accessToken) : "",
     };
   },
 
   toJSON(message: LoginUserResponse): unknown {
     const obj: any = {};
-    if (message.refreshToken !== '') {
+    if (message.refreshToken !== "") {
       obj.refreshToken = message.refreshToken;
     }
-    if (message.accessToken !== '') {
+    if (message.accessToken !== "") {
       obj.accessToken = message.accessToken;
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<LoginUserResponse>, I>>(
-    base?: I,
-  ): LoginUserResponse {
+  create<I extends Exact<DeepPartial<LoginUserResponse>, I>>(base?: I): LoginUserResponse {
     return LoginUserResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<LoginUserResponse>, I>>(
-    object: I,
-  ): LoginUserResponse {
+  fromPartial<I extends Exact<DeepPartial<LoginUserResponse>, I>>(object: I): LoginUserResponse {
     const message = createBaseLoginUserResponse();
-    message.refreshToken = object.refreshToken ?? '';
-    message.accessToken = object.accessToken ?? '';
+    message.refreshToken = object.refreshToken ?? "";
+    message.accessToken = object.accessToken ?? "";
     return message;
   },
 };
 
 function createBaseGetUserInfoRequest(): GetUserInfoRequest {
-  return { userId: '' };
+  return { userId: "" };
 }
 
 export const GetUserInfoRequest: MessageFns<GetUserInfoRequest> = {
-  encode(
-    message: GetUserInfoRequest,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
-    if (message.userId !== '') {
+  encode(message: GetUserInfoRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.userId !== "") {
       writer.uint32(10).string(message.userId);
     }
     return writer;
   },
 
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number,
-  ): GetUserInfoRequest {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GetUserInfoRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGetUserInfoRequest();
     while (reader.pos < end) {
@@ -650,66 +575,53 @@ export const GetUserInfoRequest: MessageFns<GetUserInfoRequest> = {
   },
 
   fromJSON(object: any): GetUserInfoRequest {
-    return {
-      userId: isSet(object.userId) ? globalThis.String(object.userId) : '',
-    };
+    return { userId: isSet(object.userId) ? globalThis.String(object.userId) : "" };
   },
 
   toJSON(message: GetUserInfoRequest): unknown {
     const obj: any = {};
-    if (message.userId !== '') {
+    if (message.userId !== "") {
       obj.userId = message.userId;
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GetUserInfoRequest>, I>>(
-    base?: I,
-  ): GetUserInfoRequest {
+  create<I extends Exact<DeepPartial<GetUserInfoRequest>, I>>(base?: I): GetUserInfoRequest {
     return GetUserInfoRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<GetUserInfoRequest>, I>>(
-    object: I,
-  ): GetUserInfoRequest {
+  fromPartial<I extends Exact<DeepPartial<GetUserInfoRequest>, I>>(object: I): GetUserInfoRequest {
     const message = createBaseGetUserInfoRequest();
-    message.userId = object.userId ?? '';
+    message.userId = object.userId ?? "";
     return message;
   },
 };
 
 function createBaseGetUserInfoResponse(): GetUserInfoResponse {
-  return { id: '', email: '', name: '', age: 0, profile: '' };
+  return { id: "", email: "", name: "", age: 0, profile: "" };
 }
 
 export const GetUserInfoResponse: MessageFns<GetUserInfoResponse> = {
-  encode(
-    message: GetUserInfoResponse,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
-    if (message.id !== '') {
+  encode(message: GetUserInfoResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.email !== '') {
+    if (message.email !== "") {
       writer.uint32(18).string(message.email);
     }
-    if (message.name !== '') {
+    if (message.name !== "") {
       writer.uint32(26).string(message.name);
     }
     if (message.age !== 0) {
       writer.uint32(32).int32(message.age);
     }
-    if (message.profile !== '') {
+    if (message.profile !== "") {
       writer.uint32(42).string(message.profile);
     }
     return writer;
   },
 
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number,
-  ): GetUserInfoResponse {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): GetUserInfoResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGetUserInfoResponse();
     while (reader.pos < end) {
@@ -766,189 +678,119 @@ export const GetUserInfoResponse: MessageFns<GetUserInfoResponse> = {
 
   fromJSON(object: any): GetUserInfoResponse {
     return {
-      id: isSet(object.id) ? globalThis.String(object.id) : '',
-      email: isSet(object.email) ? globalThis.String(object.email) : '',
-      name: isSet(object.name) ? globalThis.String(object.name) : '',
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
+      email: isSet(object.email) ? globalThis.String(object.email) : "",
+      name: isSet(object.name) ? globalThis.String(object.name) : "",
       age: isSet(object.age) ? globalThis.Number(object.age) : 0,
-      profile: isSet(object.profile) ? globalThis.String(object.profile) : '',
+      profile: isSet(object.profile) ? globalThis.String(object.profile) : "",
     };
   },
 
   toJSON(message: GetUserInfoResponse): unknown {
     const obj: any = {};
-    if (message.id !== '') {
+    if (message.id !== "") {
       obj.id = message.id;
     }
-    if (message.email !== '') {
+    if (message.email !== "") {
       obj.email = message.email;
     }
-    if (message.name !== '') {
+    if (message.name !== "") {
       obj.name = message.name;
     }
     if (message.age !== 0) {
       obj.age = Math.round(message.age);
     }
-    if (message.profile !== '') {
+    if (message.profile !== "") {
       obj.profile = message.profile;
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GetUserInfoResponse>, I>>(
-    base?: I,
-  ): GetUserInfoResponse {
+  create<I extends Exact<DeepPartial<GetUserInfoResponse>, I>>(base?: I): GetUserInfoResponse {
     return GetUserInfoResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<GetUserInfoResponse>, I>>(
-    object: I,
-  ): GetUserInfoResponse {
+  fromPartial<I extends Exact<DeepPartial<GetUserInfoResponse>, I>>(object: I): GetUserInfoResponse {
     const message = createBaseGetUserInfoResponse();
-    message.id = object.id ?? '';
-    message.email = object.email ?? '';
-    message.name = object.name ?? '';
+    message.id = object.id ?? "";
+    message.email = object.email ?? "";
+    message.name = object.name ?? "";
     message.age = object.age ?? 0;
-    message.profile = object.profile ?? '';
+    message.profile = object.profile ?? "";
     return message;
   },
 };
 
 export interface AuthService {
-  ParseBearerToken(
-    request: ParseBearerTokenRequest,
-    metadata?: Metadata,
-  ): Promise<ParseBearerTokenResponse>;
-  RegisterUser(
-    request: RegisterUserRequest,
-    metadata?: Metadata,
-  ): Promise<RegisterUserResponse>;
-  LoginUser(
-    request: LoginUserRequest,
-    metadata?: Metadata,
-  ): Promise<LoginUserResponse>;
+  parseBearerToken(request: ParseBearerTokenRequest, metadata?: Metadata): Promise<ParseBearerTokenResponse>;
+  registerUser(request: RegisterUserRequest, metadata?: Metadata): Promise<RegisterUserResponse>;
+  loginUser(request: LoginUserRequest, metadata?: Metadata): Promise<LoginUserResponse>;
 }
 
-export const AuthServiceServiceName = 'user.AuthService';
+export const AuthServiceServiceName = "user.AuthService";
 export class AuthServiceClientImpl implements AuthService {
   private readonly rpc: Rpc;
   private readonly service: string;
   constructor(rpc: Rpc, opts?: { service?: string }) {
     this.service = opts?.service || AuthServiceServiceName;
     this.rpc = rpc;
-    this.ParseBearerToken = this.ParseBearerToken.bind(this);
-    this.RegisterUser = this.RegisterUser.bind(this);
-    this.LoginUser = this.LoginUser.bind(this);
+    this.parseBearerToken = this.parseBearerToken.bind(this);
+    this.registerUser = this.registerUser.bind(this);
+    this.loginUser = this.loginUser.bind(this);
   }
-  ParseBearerToken(
-    request: ParseBearerTokenRequest,
-    metadata?: Metadata,
-  ): Promise<ParseBearerTokenResponse> {
+  parseBearerToken(request: ParseBearerTokenRequest, metadata?: Metadata): Promise<ParseBearerTokenResponse> {
     const data = ParseBearerTokenRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      this.service,
-      'ParseBearerToken',
-      data,
-      metadata,
-    );
-    return promise.then((data) =>
-      ParseBearerTokenResponse.decode(new BinaryReader(data)),
-    );
+    const promise = this.rpc.request(this.service, "ParseBearerToken", data, metadata);
+    return promise.then((data) => ParseBearerTokenResponse.decode(new BinaryReader(data)));
   }
 
-  RegisterUser(
-    request: RegisterUserRequest,
-    metadata?: Metadata,
-  ): Promise<RegisterUserResponse> {
+  registerUser(request: RegisterUserRequest, metadata?: Metadata): Promise<RegisterUserResponse> {
     const data = RegisterUserRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      this.service,
-      'RegisterUser',
-      data,
-      metadata,
-    );
-    return promise.then((data) =>
-      RegisterUserResponse.decode(new BinaryReader(data)),
-    );
+    const promise = this.rpc.request(this.service, "RegisterUser", data, metadata);
+    return promise.then((data) => RegisterUserResponse.decode(new BinaryReader(data)));
   }
 
-  LoginUser(
-    request: LoginUserRequest,
-    metadata?: Metadata,
-  ): Promise<LoginUserResponse> {
+  loginUser(request: LoginUserRequest, metadata?: Metadata): Promise<LoginUserResponse> {
     const data = LoginUserRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, 'LoginUser', data, metadata);
-    return promise.then((data) =>
-      LoginUserResponse.decode(new BinaryReader(data)),
-    );
+    const promise = this.rpc.request(this.service, "LoginUser", data, metadata);
+    return promise.then((data) => LoginUserResponse.decode(new BinaryReader(data)));
   }
 }
 
 export interface UserService {
-  GetUserInfo(
-    request: GetUserInfoRequest,
-    metadata?: Metadata,
-  ): Promise<GetUserInfoResponse>;
+  getUserInfo(request: GetUserInfoRequest, metadata?: Metadata): Promise<GetUserInfoResponse>;
 }
 
-export const UserServiceServiceName = 'user.UserService';
+export const UserServiceServiceName = "user.UserService";
 export class UserServiceClientImpl implements UserService {
   private readonly rpc: Rpc;
   private readonly service: string;
   constructor(rpc: Rpc, opts?: { service?: string }) {
     this.service = opts?.service || UserServiceServiceName;
     this.rpc = rpc;
-    this.GetUserInfo = this.GetUserInfo.bind(this);
+    this.getUserInfo = this.getUserInfo.bind(this);
   }
-  GetUserInfo(
-    request: GetUserInfoRequest,
-    metadata?: Metadata,
-  ): Promise<GetUserInfoResponse> {
+  getUserInfo(request: GetUserInfoRequest, metadata?: Metadata): Promise<GetUserInfoResponse> {
     const data = GetUserInfoRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      this.service,
-      'GetUserInfo',
-      data,
-      metadata,
-    );
-    return promise.then((data) =>
-      GetUserInfoResponse.decode(new BinaryReader(data)),
-    );
+    const promise = this.rpc.request(this.service, "GetUserInfo", data, metadata);
+    return promise.then((data) => GetUserInfoResponse.decode(new BinaryReader(data)));
   }
 }
 
 interface Rpc {
-  request(
-    service: string,
-    method: string,
-    data: Uint8Array,
-    metadata?: Metadata,
-  ): Promise<Uint8Array>;
+  request(service: string, method: string, data: Uint8Array, metadata?: Metadata): Promise<Uint8Array>;
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends globalThis.Array<infer U>
-    ? globalThis.Array<DeepPartial<U>>
-    : T extends ReadonlyArray<infer U>
-      ? ReadonlyArray<DeepPartial<U>>
-      : T extends {}
-        ? { [K in keyof T]?: DeepPartial<T[K]> }
-        : Partial<T>;
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
-      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
-    };
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

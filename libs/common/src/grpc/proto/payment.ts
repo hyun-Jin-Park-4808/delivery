@@ -337,7 +337,7 @@ export const MakePaymentResponse: MessageFns<MakePaymentResponse> = {
 };
 
 export interface PaymentService {
-  MakePayment(request: MakePaymentRequest, metadata?: Metadata): Promise<MakePaymentResponse>;
+  makePayment(request: MakePaymentRequest, metadata?: Metadata): Promise<MakePaymentResponse>;
 }
 
 export const PaymentServiceServiceName = "payment.PaymentService";
@@ -347,9 +347,9 @@ export class PaymentServiceClientImpl implements PaymentService {
   constructor(rpc: Rpc, opts?: { service?: string }) {
     this.service = opts?.service || PaymentServiceServiceName;
     this.rpc = rpc;
-    this.MakePayment = this.MakePayment.bind(this);
+    this.makePayment = this.makePayment.bind(this);
   }
-  MakePayment(request: MakePaymentRequest, metadata?: Metadata): Promise<MakePaymentResponse> {
+  makePayment(request: MakePaymentRequest, metadata?: Metadata): Promise<MakePaymentResponse> {
     const data = MakePaymentRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "MakePayment", data, metadata);
     return promise.then((data) => MakePaymentResponse.decode(new BinaryReader(data)));

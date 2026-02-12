@@ -392,8 +392,8 @@ export const GetProductInfoResponse_ProductInfo: MessageFns<GetProductInfoRespon
 };
 
 export interface ProductService {
-  CreateSamples(request: CreateSamplesRequest, metadata?: Metadata): Promise<CreateSamplesResponse>;
-  GetProductInfo(request: GetProductInfoRequest, metadata?: Metadata): Promise<GetProductInfoResponse>;
+  createSamples(request: CreateSamplesRequest, metadata?: Metadata): Promise<CreateSamplesResponse>;
+  getProductInfo(request: GetProductInfoRequest, metadata?: Metadata): Promise<GetProductInfoResponse>;
 }
 
 export const ProductServiceServiceName = "product.ProductService";
@@ -403,16 +403,16 @@ export class ProductServiceClientImpl implements ProductService {
   constructor(rpc: Rpc, opts?: { service?: string }) {
     this.service = opts?.service || ProductServiceServiceName;
     this.rpc = rpc;
-    this.CreateSamples = this.CreateSamples.bind(this);
-    this.GetProductInfo = this.GetProductInfo.bind(this);
+    this.createSamples = this.createSamples.bind(this);
+    this.getProductInfo = this.getProductInfo.bind(this);
   }
-  CreateSamples(request: CreateSamplesRequest, metadata?: Metadata): Promise<CreateSamplesResponse> {
+  createSamples(request: CreateSamplesRequest, metadata?: Metadata): Promise<CreateSamplesResponse> {
     const data = CreateSamplesRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "CreateSamples", data, metadata);
     return promise.then((data) => CreateSamplesResponse.decode(new BinaryReader(data)));
   }
 
-  GetProductInfo(request: GetProductInfoRequest, metadata?: Metadata): Promise<GetProductInfoResponse> {
+  getProductInfo(request: GetProductInfoRequest, metadata?: Metadata): Promise<GetProductInfoResponse> {
     const data = GetProductInfoRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "GetProductInfo", data, metadata);
     return promise.then((data) => GetProductInfoResponse.decode(new BinaryReader(data)));

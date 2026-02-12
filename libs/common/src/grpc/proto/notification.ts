@@ -228,7 +228,7 @@ export const SendPaymentNotificationResponse: MessageFns<SendPaymentNotification
 };
 
 export interface NotificationService {
-  SendPaymentNotification(
+  sendPaymentNotification(
     request: SendPaymentNotificationRequest,
     metadata?: Metadata,
   ): Promise<SendPaymentNotificationResponse>;
@@ -241,9 +241,9 @@ export class NotificationServiceClientImpl implements NotificationService {
   constructor(rpc: Rpc, opts?: { service?: string }) {
     this.service = opts?.service || NotificationServiceServiceName;
     this.rpc = rpc;
-    this.SendPaymentNotification = this.SendPaymentNotification.bind(this);
+    this.sendPaymentNotification = this.sendPaymentNotification.bind(this);
   }
-  SendPaymentNotification(
+  sendPaymentNotification(
     request: SendPaymentNotificationRequest,
     metadata?: Metadata,
   ): Promise<SendPaymentNotificationResponse> {
