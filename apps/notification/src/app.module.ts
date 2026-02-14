@@ -4,7 +4,12 @@ import * as Joi from 'joi';
 import { MongooseModule } from '@nestjs/mongoose';
 import { NotificationModule } from './notification/notification.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { ORDER_SERVICE } from '@app/common';
+import {
+  ORDER_SERVICE,
+  OrderMicroService,
+  traceInterceptor,
+} from '@app/common';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -26,13 +31,14 @@ import { ORDER_SERVICE } from '@app/common';
         {
           name: ORDER_SERVICE, // 통신할 서비스 이름, @Inject(name)으로 주입받음.
           useFactory: (configService: ConfigService) => ({
-            transport: Transport.RMQ,
+            transport: Transport.GRPC,
             options: {
-              urls: ['amqp://rabbitmq:5672'],
-              queue: 'order_queue',
-              queueOptions: {
-                durable: false,
+              channelOptions: {
+                interceptors: [traceInterceptor('Notification')],
               },
+              package: OrderMicroService.protobufPackage,
+              protoPath: join(process.cwd(), 'proto/order.proto'),
+              url: configService.getOrThrow('ORDER_GRPC_URL'),
             },
           }),
           inject: [ConfigService],

@@ -1,21 +1,15 @@
-import { RpcInterceptor } from '@app/common';
-import {
-  Body,
-  Controller,
-  Post,
-  UseInterceptors,
-  UsePipes,
-  ValidationPipe,
-} from '@nestjs/common';
-import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
-import { Authorization } from 'apps/gateway/src/auth/decorator/authorization.decorator';
-import { CreateOrderDto } from './dto/create-order.dto';
-import { DeliveryStartedDto } from './dto/delivery-started.dto';
+import { OrderMicroService } from '@app/common';
+import { Controller, UseInterceptors } from '@nestjs/common';
 import { OrderStatus } from './entity/order.entity';
+import { PaymentMethod } from './entity/payment.entity';
 import { OrderService } from './order.service';
+import { GrpcMethod } from '@nestjs/microservices';
+import { Metadata } from '@grpc/grpc-js';
+import { GrpcInterceptor } from '@app/common';
 
 @Controller('order')
-export class OrderController {
+@UseInterceptors(GrpcInterceptor)
+export class OrderController implements OrderMicroService.OrderService {
   constructor(private readonly orderService: OrderService) {}
 
   // @Post()
@@ -27,17 +21,33 @@ export class OrderController {
   //   return this.orderService.createOrder(token, createOrderDto);
   // }
 
-  @EventPattern({ cmd: 'delivery_started' })
-  @UseInterceptors(RpcInterceptor)
-  async deliveryStarted(@Payload() payload: DeliveryStartedDto) {
+  // @EventPattern({ cmd: 'delivery_started' })
+  // @UseInterceptors(RpcInterceptor)
+  @GrpcMethod('OrderService')
+  async deliveryStarted(request: OrderMicroService.DeliveryStartedRequest) {
     await this.orderService.changeOrderStatus(
-      payload.id,
+      request.id,
       OrderStatus.deliveryStarted,
     );
+
+    return {};
   }
 
-  @MessagePattern({ cmd: 'create_order' })
-  async createOrder(@Payload() payload: CreateOrderDto) {
-    return this.orderService.createOrder(payload);
+  // @MessagePattern({ cmd: 'create_order' })
+  @GrpcMethod('OrderService')
+  async createOrder(
+    request: OrderMicroService.CreateOrderRequest,
+    metadata: Metadata,
+  ) {
+    return this.orderService.createOrder(
+      {
+        ...request,
+        payment: {
+          ...request.payment,
+          paymentMethod: request.payment.paymentMethod as PaymentMethod,
+        },
+      },
+      metadata,
+    );
   }
 }

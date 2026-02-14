@@ -1,20 +1,30 @@
-import { USER_SERVICE } from '@app/common';
+import { constructMetadata, USER_SERVICE, UserMicroService } from '@app/common';
+import { ParseBearerTokenResponse } from '@app/common/grpc/proto/user';
 import {
   Inject,
   Injectable,
   NestMiddleware,
+  OnModuleInit,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { ClientGrpc, ClientProxy } from '@nestjs/microservices';
 import { NextFunction, Request, Response } from 'express';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 
 @Injectable()
-export class BearerTokenMiddleware implements NestMiddleware {
+export class BearerTokenMiddleware implements NestMiddleware, OnModuleInit {
+  private authService: UserMicroService.AuthService;
   constructor(
     @Inject(USER_SERVICE)
-    private readonly userMicroService: ClientProxy,
+    private readonly userMicroService: ClientGrpc,
   ) {}
+
+  onModuleInit() {
+    this.authService =
+      this.userMicroService.getService<UserMicroService.AuthService>(
+        'AuthService',
+      );
+  }
   async use(req: any, res: any, next: (error?: Error | any) => void) {
     // 1) raw token 가져오기
     const token = this.getRawToken(req);
@@ -39,13 +49,14 @@ export class BearerTokenMiddleware implements NestMiddleware {
 
   async verifyToken(token: string) {
     const result = await lastValueFrom(
-      this.userMicroService.send({ cmd: 'parse_bearer_token' }, { token }),
+      this.authService.parseBearerToken(
+        {
+          token,
+        },
+        constructMetadata(BearerTokenMiddleware.name, 'verifyToken'),
+      ) as unknown as Observable<ParseBearerTokenResponse>,
     );
 
-    if (result.status === 'error') {
-      throw new UnauthorizedException('토큰이 유효하지 않습니다.');
-    }
-
-    return result.data;
+    return result;
   }
 }

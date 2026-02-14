@@ -25,7 +25,7 @@ message CreateOrderRequest {
 
     message Address {
         string name = 1;
-        string steet = 2;
+        string street = 2;
         string city = 3;
         string postalCode = 4;
         string country = 5;

@@ -21,21 +21,21 @@ export interface CreateSamplesResponse {
   success: boolean;
 }
 
-export interface GetProductInfoRequest {
+export interface GetProductsInfoRequest {
   productIds: string[];
 }
 
-export interface GetProductInfoResponse {
+export interface GetProductsInfoResponse {
   /** productInfo[] */
-  productInfos: GetProductInfoResponse_ProductInfo[];
+  productInfos: GetProductsInfoResponse_ProductInfo[];
 }
 
-export interface GetProductInfoResponse_ProductInfo {
+export interface GetProductsInfoResponse_ProductInfo {
   id: string;
   name: string;
   price: number;
   description: string;
-  image: string;
+  stock: number;
 }
 
 function createBaseCreateSamplesRequest(): CreateSamplesRequest {
@@ -139,22 +139,22 @@ export const CreateSamplesResponse: MessageFns<CreateSamplesResponse> = {
   },
 };
 
-function createBaseGetProductInfoRequest(): GetProductInfoRequest {
+function createBaseGetProductsInfoRequest(): GetProductsInfoRequest {
   return { productIds: [] };
 }
 
-export const GetProductInfoRequest: MessageFns<GetProductInfoRequest> = {
-  encode(message: GetProductInfoRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const GetProductsInfoRequest: MessageFns<GetProductsInfoRequest> = {
+  encode(message: GetProductsInfoRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     for (const v of message.productIds) {
       writer.uint32(10).string(v!);
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): GetProductInfoRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number): GetProductsInfoRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGetProductInfoRequest();
+    const message = createBaseGetProductsInfoRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -175,7 +175,7 @@ export const GetProductInfoRequest: MessageFns<GetProductInfoRequest> = {
     return message;
   },
 
-  fromJSON(object: any): GetProductInfoRequest {
+  fromJSON(object: any): GetProductsInfoRequest {
     return {
       productIds: globalThis.Array.isArray(object?.productIds)
         ? object.productIds.map((e: any) => globalThis.String(e))
@@ -183,7 +183,7 @@ export const GetProductInfoRequest: MessageFns<GetProductInfoRequest> = {
     };
   },
 
-  toJSON(message: GetProductInfoRequest): unknown {
+  toJSON(message: GetProductsInfoRequest): unknown {
     const obj: any = {};
     if (message.productIds?.length) {
       obj.productIds = message.productIds;
@@ -191,32 +191,32 @@ export const GetProductInfoRequest: MessageFns<GetProductInfoRequest> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GetProductInfoRequest>, I>>(base?: I): GetProductInfoRequest {
-    return GetProductInfoRequest.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<GetProductsInfoRequest>, I>>(base?: I): GetProductsInfoRequest {
+    return GetProductsInfoRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<GetProductInfoRequest>, I>>(object: I): GetProductInfoRequest {
-    const message = createBaseGetProductInfoRequest();
+  fromPartial<I extends Exact<DeepPartial<GetProductsInfoRequest>, I>>(object: I): GetProductsInfoRequest {
+    const message = createBaseGetProductsInfoRequest();
     message.productIds = object.productIds?.map((e) => e) || [];
     return message;
   },
 };
 
-function createBaseGetProductInfoResponse(): GetProductInfoResponse {
+function createBaseGetProductsInfoResponse(): GetProductsInfoResponse {
   return { productInfos: [] };
 }
 
-export const GetProductInfoResponse: MessageFns<GetProductInfoResponse> = {
-  encode(message: GetProductInfoResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const GetProductsInfoResponse: MessageFns<GetProductsInfoResponse> = {
+  encode(message: GetProductsInfoResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     for (const v of message.productInfos) {
-      GetProductInfoResponse_ProductInfo.encode(v!, writer.uint32(10).fork()).join();
+      GetProductsInfoResponse_ProductInfo.encode(v!, writer.uint32(10).fork()).join();
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): GetProductInfoResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number): GetProductsInfoResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGetProductInfoResponse();
+    const message = createBaseGetProductsInfoResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -225,7 +225,7 @@ export const GetProductInfoResponse: MessageFns<GetProductInfoResponse> = {
             break;
           }
 
-          message.productInfos.push(GetProductInfoResponse_ProductInfo.decode(reader, reader.uint32()));
+          message.productInfos.push(GetProductsInfoResponse_ProductInfo.decode(reader, reader.uint32()));
           continue;
         }
       }
@@ -237,38 +237,38 @@ export const GetProductInfoResponse: MessageFns<GetProductInfoResponse> = {
     return message;
   },
 
-  fromJSON(object: any): GetProductInfoResponse {
+  fromJSON(object: any): GetProductsInfoResponse {
     return {
       productInfos: globalThis.Array.isArray(object?.productInfos)
-        ? object.productInfos.map((e: any) => GetProductInfoResponse_ProductInfo.fromJSON(e))
+        ? object.productInfos.map((e: any) => GetProductsInfoResponse_ProductInfo.fromJSON(e))
         : [],
     };
   },
 
-  toJSON(message: GetProductInfoResponse): unknown {
+  toJSON(message: GetProductsInfoResponse): unknown {
     const obj: any = {};
     if (message.productInfos?.length) {
-      obj.productInfos = message.productInfos.map((e) => GetProductInfoResponse_ProductInfo.toJSON(e));
+      obj.productInfos = message.productInfos.map((e) => GetProductsInfoResponse_ProductInfo.toJSON(e));
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GetProductInfoResponse>, I>>(base?: I): GetProductInfoResponse {
-    return GetProductInfoResponse.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<GetProductsInfoResponse>, I>>(base?: I): GetProductsInfoResponse {
+    return GetProductsInfoResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<GetProductInfoResponse>, I>>(object: I): GetProductInfoResponse {
-    const message = createBaseGetProductInfoResponse();
-    message.productInfos = object.productInfos?.map((e) => GetProductInfoResponse_ProductInfo.fromPartial(e)) || [];
+  fromPartial<I extends Exact<DeepPartial<GetProductsInfoResponse>, I>>(object: I): GetProductsInfoResponse {
+    const message = createBaseGetProductsInfoResponse();
+    message.productInfos = object.productInfos?.map((e) => GetProductsInfoResponse_ProductInfo.fromPartial(e)) || [];
     return message;
   },
 };
 
-function createBaseGetProductInfoResponse_ProductInfo(): GetProductInfoResponse_ProductInfo {
-  return { id: "", name: "", price: 0, description: "", image: "" };
+function createBaseGetProductsInfoResponse_ProductInfo(): GetProductsInfoResponse_ProductInfo {
+  return { id: "", name: "", price: 0, description: "", stock: 0 };
 }
 
-export const GetProductInfoResponse_ProductInfo: MessageFns<GetProductInfoResponse_ProductInfo> = {
-  encode(message: GetProductInfoResponse_ProductInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const GetProductsInfoResponse_ProductInfo: MessageFns<GetProductsInfoResponse_ProductInfo> = {
+  encode(message: GetProductsInfoResponse_ProductInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -281,16 +281,16 @@ export const GetProductInfoResponse_ProductInfo: MessageFns<GetProductInfoRespon
     if (message.description !== "") {
       writer.uint32(34).string(message.description);
     }
-    if (message.image !== "") {
-      writer.uint32(42).string(message.image);
+    if (message.stock !== 0) {
+      writer.uint32(40).int32(message.stock);
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): GetProductInfoResponse_ProductInfo {
+  decode(input: BinaryReader | Uint8Array, length?: number): GetProductsInfoResponse_ProductInfo {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGetProductInfoResponse_ProductInfo();
+    const message = createBaseGetProductsInfoResponse_ProductInfo();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -327,11 +327,11 @@ export const GetProductInfoResponse_ProductInfo: MessageFns<GetProductInfoRespon
           continue;
         }
         case 5: {
-          if (tag !== 42) {
+          if (tag !== 40) {
             break;
           }
 
-          message.image = reader.string();
+          message.stock = reader.int32();
           continue;
         }
       }
@@ -343,17 +343,17 @@ export const GetProductInfoResponse_ProductInfo: MessageFns<GetProductInfoRespon
     return message;
   },
 
-  fromJSON(object: any): GetProductInfoResponse_ProductInfo {
+  fromJSON(object: any): GetProductsInfoResponse_ProductInfo {
     return {
       id: isSet(object.id) ? globalThis.String(object.id) : "",
       name: isSet(object.name) ? globalThis.String(object.name) : "",
       price: isSet(object.price) ? globalThis.Number(object.price) : 0,
       description: isSet(object.description) ? globalThis.String(object.description) : "",
-      image: isSet(object.image) ? globalThis.String(object.image) : "",
+      stock: isSet(object.stock) ? globalThis.Number(object.stock) : 0,
     };
   },
 
-  toJSON(message: GetProductInfoResponse_ProductInfo): unknown {
+  toJSON(message: GetProductsInfoResponse_ProductInfo): unknown {
     const obj: any = {};
     if (message.id !== "") {
       obj.id = message.id;
@@ -367,33 +367,33 @@ export const GetProductInfoResponse_ProductInfo: MessageFns<GetProductInfoRespon
     if (message.description !== "") {
       obj.description = message.description;
     }
-    if (message.image !== "") {
-      obj.image = message.image;
+    if (message.stock !== 0) {
+      obj.stock = Math.round(message.stock);
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GetProductInfoResponse_ProductInfo>, I>>(
+  create<I extends Exact<DeepPartial<GetProductsInfoResponse_ProductInfo>, I>>(
     base?: I,
-  ): GetProductInfoResponse_ProductInfo {
-    return GetProductInfoResponse_ProductInfo.fromPartial(base ?? ({} as any));
+  ): GetProductsInfoResponse_ProductInfo {
+    return GetProductsInfoResponse_ProductInfo.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<GetProductInfoResponse_ProductInfo>, I>>(
+  fromPartial<I extends Exact<DeepPartial<GetProductsInfoResponse_ProductInfo>, I>>(
     object: I,
-  ): GetProductInfoResponse_ProductInfo {
-    const message = createBaseGetProductInfoResponse_ProductInfo();
+  ): GetProductsInfoResponse_ProductInfo {
+    const message = createBaseGetProductsInfoResponse_ProductInfo();
     message.id = object.id ?? "";
     message.name = object.name ?? "";
     message.price = object.price ?? 0;
     message.description = object.description ?? "";
-    message.image = object.image ?? "";
+    message.stock = object.stock ?? 0;
     return message;
   },
 };
 
 export interface ProductService {
   createSamples(request: CreateSamplesRequest, metadata?: Metadata): Promise<CreateSamplesResponse>;
-  getProductInfo(request: GetProductInfoRequest, metadata?: Metadata): Promise<GetProductInfoResponse>;
+  getProductsInfo(request: GetProductsInfoRequest, metadata?: Metadata): Promise<GetProductsInfoResponse>;
 }
 
 export const ProductServiceServiceName = "product.ProductService";
@@ -404,7 +404,7 @@ export class ProductServiceClientImpl implements ProductService {
     this.service = opts?.service || ProductServiceServiceName;
     this.rpc = rpc;
     this.createSamples = this.createSamples.bind(this);
-    this.getProductInfo = this.getProductInfo.bind(this);
+    this.getProductsInfo = this.getProductsInfo.bind(this);
   }
   createSamples(request: CreateSamplesRequest, metadata?: Metadata): Promise<CreateSamplesResponse> {
     const data = CreateSamplesRequest.encode(request).finish();
@@ -412,10 +412,10 @@ export class ProductServiceClientImpl implements ProductService {
     return promise.then((data) => CreateSamplesResponse.decode(new BinaryReader(data)));
   }
 
-  getProductInfo(request: GetProductInfoRequest, metadata?: Metadata): Promise<GetProductInfoResponse> {
-    const data = GetProductInfoRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "GetProductInfo", data, metadata);
-    return promise.then((data) => GetProductInfoResponse.decode(new BinaryReader(data)));
+  getProductsInfo(request: GetProductsInfoRequest, metadata?: Metadata): Promise<GetProductsInfoResponse> {
+    const data = GetProductsInfoRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "GetProductsInfo", data, metadata);
+    return promise.then((data) => GetProductsInfoResponse.decode(new BinaryReader(data)));
   }
 }
 

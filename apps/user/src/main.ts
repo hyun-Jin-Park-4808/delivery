@@ -19,6 +19,8 @@ async function bootstrap() {
     },
   });
 
+  await app.init(); // onModuleInit()이 가끔 실행이 안 될 때가 있어서 여기서 init()해주면 무조건 실행된다.
+
   await app.startAllMicroservices(); // microservice들을 실행하겠다.
 }
 bootstrap();

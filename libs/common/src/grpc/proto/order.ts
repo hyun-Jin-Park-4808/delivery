@@ -34,7 +34,7 @@ export interface CreateOrderRequest_Meta_UserPayload {
 
 export interface CreateOrderRequest_Address {
   name: string;
-  steet: string;
+  street: string;
   city: string;
   postalCode: string;
   country: string;
@@ -426,7 +426,7 @@ export const CreateOrderRequest_Meta_UserPayload: MessageFns<CreateOrderRequest_
 };
 
 function createBaseCreateOrderRequest_Address(): CreateOrderRequest_Address {
-  return { name: "", steet: "", city: "", postalCode: "", country: "" };
+  return { name: "", street: "", city: "", postalCode: "", country: "" };
 }
 
 export const CreateOrderRequest_Address: MessageFns<CreateOrderRequest_Address> = {
@@ -434,8 +434,8 @@ export const CreateOrderRequest_Address: MessageFns<CreateOrderRequest_Address> 
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
-    if (message.steet !== "") {
-      writer.uint32(18).string(message.steet);
+    if (message.street !== "") {
+      writer.uint32(18).string(message.street);
     }
     if (message.city !== "") {
       writer.uint32(26).string(message.city);
@@ -469,7 +469,7 @@ export const CreateOrderRequest_Address: MessageFns<CreateOrderRequest_Address> 
             break;
           }
 
-          message.steet = reader.string();
+          message.street = reader.string();
           continue;
         }
         case 3: {
@@ -508,7 +508,7 @@ export const CreateOrderRequest_Address: MessageFns<CreateOrderRequest_Address> 
   fromJSON(object: any): CreateOrderRequest_Address {
     return {
       name: isSet(object.name) ? globalThis.String(object.name) : "",
-      steet: isSet(object.steet) ? globalThis.String(object.steet) : "",
+      street: isSet(object.street) ? globalThis.String(object.street) : "",
       city: isSet(object.city) ? globalThis.String(object.city) : "",
       postalCode: isSet(object.postalCode) ? globalThis.String(object.postalCode) : "",
       country: isSet(object.country) ? globalThis.String(object.country) : "",
@@ -520,8 +520,8 @@ export const CreateOrderRequest_Address: MessageFns<CreateOrderRequest_Address> 
     if (message.name !== "") {
       obj.name = message.name;
     }
-    if (message.steet !== "") {
-      obj.steet = message.steet;
+    if (message.street !== "") {
+      obj.street = message.street;
     }
     if (message.city !== "") {
       obj.city = message.city;
@@ -541,7 +541,7 @@ export const CreateOrderRequest_Address: MessageFns<CreateOrderRequest_Address> 
   fromPartial<I extends Exact<DeepPartial<CreateOrderRequest_Address>, I>>(object: I): CreateOrderRequest_Address {
     const message = createBaseCreateOrderRequest_Address();
     message.name = object.name ?? "";
-    message.steet = object.steet ?? "";
+    message.street = object.street ?? "";
     message.city = object.city ?? "";
     message.postalCode = object.postalCode ?? "";
     message.country = object.country ?? "";

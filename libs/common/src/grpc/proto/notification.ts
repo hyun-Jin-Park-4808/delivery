@@ -18,9 +18,9 @@ export interface SendPaymentNotificationRequest {
 export interface SendPaymentNotificationResponse {
   from: string;
   to: string;
-  subject: number;
+  subject: string;
   content: string;
-  notifiactionStatus: string;
+  status: string;
 }
 
 function createBaseSendPaymentNotificationRequest(): SendPaymentNotificationRequest {
@@ -102,7 +102,7 @@ export const SendPaymentNotificationRequest: MessageFns<SendPaymentNotificationR
 };
 
 function createBaseSendPaymentNotificationResponse(): SendPaymentNotificationResponse {
-  return { from: "", to: "", subject: 0, content: "", notifiactionStatus: "" };
+  return { from: "", to: "", subject: "", content: "", status: "" };
 }
 
 export const SendPaymentNotificationResponse: MessageFns<SendPaymentNotificationResponse> = {
@@ -113,14 +113,14 @@ export const SendPaymentNotificationResponse: MessageFns<SendPaymentNotification
     if (message.to !== "") {
       writer.uint32(18).string(message.to);
     }
-    if (message.subject !== 0) {
-      writer.uint32(24).int32(message.subject);
+    if (message.subject !== "") {
+      writer.uint32(26).string(message.subject);
     }
     if (message.content !== "") {
       writer.uint32(34).string(message.content);
     }
-    if (message.notifiactionStatus !== "") {
-      writer.uint32(42).string(message.notifiactionStatus);
+    if (message.status !== "") {
+      writer.uint32(42).string(message.status);
     }
     return writer;
   },
@@ -149,11 +149,11 @@ export const SendPaymentNotificationResponse: MessageFns<SendPaymentNotification
           continue;
         }
         case 3: {
-          if (tag !== 24) {
+          if (tag !== 26) {
             break;
           }
 
-          message.subject = reader.int32();
+          message.subject = reader.string();
           continue;
         }
         case 4: {
@@ -169,7 +169,7 @@ export const SendPaymentNotificationResponse: MessageFns<SendPaymentNotification
             break;
           }
 
-          message.notifiactionStatus = reader.string();
+          message.status = reader.string();
           continue;
         }
       }
@@ -185,9 +185,9 @@ export const SendPaymentNotificationResponse: MessageFns<SendPaymentNotification
     return {
       from: isSet(object.from) ? globalThis.String(object.from) : "",
       to: isSet(object.to) ? globalThis.String(object.to) : "",
-      subject: isSet(object.subject) ? globalThis.Number(object.subject) : 0,
+      subject: isSet(object.subject) ? globalThis.String(object.subject) : "",
       content: isSet(object.content) ? globalThis.String(object.content) : "",
-      notifiactionStatus: isSet(object.notifiactionStatus) ? globalThis.String(object.notifiactionStatus) : "",
+      status: isSet(object.status) ? globalThis.String(object.status) : "",
     };
   },
 
@@ -199,14 +199,14 @@ export const SendPaymentNotificationResponse: MessageFns<SendPaymentNotification
     if (message.to !== "") {
       obj.to = message.to;
     }
-    if (message.subject !== 0) {
-      obj.subject = Math.round(message.subject);
+    if (message.subject !== "") {
+      obj.subject = message.subject;
     }
     if (message.content !== "") {
       obj.content = message.content;
     }
-    if (message.notifiactionStatus !== "") {
-      obj.notifiactionStatus = message.notifiactionStatus;
+    if (message.status !== "") {
+      obj.status = message.status;
     }
     return obj;
   },
@@ -220,9 +220,9 @@ export const SendPaymentNotificationResponse: MessageFns<SendPaymentNotification
     const message = createBaseSendPaymentNotificationResponse();
     message.from = object.from ?? "";
     message.to = object.to ?? "";
-    message.subject = object.subject ?? 0;
+    message.subject = object.subject ?? "";
     message.content = object.content ?? "";
-    message.notifiactionStatus = object.notifiactionStatus ?? "";
+    message.status = object.status ?? "";
     return message;
   },
 };
