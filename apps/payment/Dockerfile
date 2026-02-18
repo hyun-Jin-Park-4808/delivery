@@ -42,5 +42,4 @@ RUN pnpm install --prod
 COPY --from=development /usr/src/app/dist ./dist
 COPY proto proto
 
-# 개발 모드로 실행
 CMD ["node", "dist/apps/payment/main"]  

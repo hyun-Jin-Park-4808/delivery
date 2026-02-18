@@ -17,6 +17,7 @@ import { ConfigModule } from '@nestjs/config';
 import { BearerTokenMiddleware } from './auth/middleware/bearer-token.middleware';
 import { join } from 'path';
 import { traceInterceptor } from '@app/common/grpc';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -85,6 +86,7 @@ import { traceInterceptor } from '@app/common/grpc';
       ],
       isGlobal: true,
     }),
+    HealthModule,
   ],
 })
 export class AppModule implements NestModule {

@@ -16,16 +16,20 @@ import { join } from 'path';
     PaymentModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      validationSchema: Joi.object({
-        DB_URL: Joi.string().required(),
-      }),
     }),
     TypeOrmModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        url: configService.getOrThrow('DB_URL'),
+        host: configService.getOrThrow('DB_HOST'),
+        port: 5432,
+        username: configService.getOrThrow('DB_USER'),
+        password: configService.getOrThrow('DB_PASSWORD'),
+        database: configService.getOrThrow('DB_NAME'),
         autoLoadEntities: true,
         synchronize: true,
+        ssl: {
+          rejectUnauthorized: false,
+        },
       }),
       inject: [ConfigService],
     }),

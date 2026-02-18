@@ -24,7 +24,6 @@ import { join } from 'path';
         HTTP_PORT: Joi.string().required(),
         USER_HOST: Joi.string().required(),
         USER_TCP_PORT: Joi.number().required(),
-        DB_URL: Joi.string().required(),
         PAYMENT_HOST: Joi.string().required(),
         PAYMENT_TCP_PORT: Joi.number().required(),
         PRODUCT_HOST: Joi.string().required(),

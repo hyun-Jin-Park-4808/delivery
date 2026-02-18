@@ -16,9 +16,6 @@ import { join } from 'path';
     NotificationModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      validationSchema: Joi.object({
-        DB_URL: Joi.string().required(),
-      }),
     }),
     MongooseModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({

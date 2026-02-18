@@ -1,0 +1,32 @@
+services:
+  gateway:
+    image: guswlsdl4808/fc-nestjs-gateway:latest
+    env_file: ## 환경변수 파일 경로 입력
+      - ./apps/gateway/prod.env
+    ports:
+      - "3000:3000" ## 내 컴퓨터 포트:도커 컨테이너 안 포트
+
+  user:
+    image: guswlsdl4808/fc-nestjs-user:latest
+    env_file: 
+      - ./apps/user/prod.env
+
+  product:
+    image: guswlsdl4808/fc-nestjs-product:latest
+    env_file:
+      - ./apps/product/prod.env
+
+  order:
+    image: guswlsdl4808/fc-nestjs-order:latest
+    env_file:
+      - ./apps/order/prod.env
+
+  payment:
+    image: guswlsdl4808/fc-nestjs-payment:latest
+    env_file:
+      - ./apps/payment/prod.env
+
+  notification:
+    image: guswlsdl4808/fc-nestjs-notification:latest
+    env_file:
+      - ./apps/notification/prod.env

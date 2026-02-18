@@ -11,16 +11,22 @@ import { ProductModule } from './product/product.module';
       isGlobal: true,
       validationSchema: Joi.object({
         HTTP_PORT: Joi.string().required(),
-        DB_URL: Joi.string().required(),
         TCP_PORT: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        url: configService.getOrThrow('DB_URL'),
+        host: configService.getOrThrow('DB_HOST'),
+        port: 5432,
+        username: configService.getOrThrow('DB_USER'),
+        password: configService.getOrThrow('DB_PASSWORD'),
+        database: configService.getOrThrow('DB_NAME'),
         autoLoadEntities: true,
         synchronize: true,
+        ssl: {
+          rejectUnauthorized: false,
+        },
       }),
       inject: [ConfigService],
     }),
