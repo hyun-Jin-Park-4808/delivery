@@ -9,6 +9,7 @@ import {
 } from '@app/common';
 import { join } from 'path';
 import { PaymentModule } from './payment/payment.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -29,6 +30,12 @@ import { PaymentModule } from './payment/payment.module';
         // ssl: {
         //   rejectUnauthorized: false,
         // },
+      }),
+      inject: [ConfigService],
+    }),
+    MongooseModule.forRootAsync({
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.getOrThrow('MONGO_DB_URL'),
       }),
       inject: [ConfigService],
     }),
