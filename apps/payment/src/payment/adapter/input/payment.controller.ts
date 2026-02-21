@@ -1,7 +1,6 @@
 import { Controller, UseInterceptors } from '@nestjs/common';
 import { PaymentMicroService } from '@app/common';
 import { GrpcMethod } from '@nestjs/microservices';
-import { Metadata } from '@grpc/grpc-js';
 import { GrpcInterceptor } from '@app/common';
 import { PaymentMethod } from '../../domain/payment.domain';
 import { PaymentService } from '../../application/payment.service';
@@ -12,10 +11,7 @@ export class PaymentController implements PaymentMicroService.PaymentService {
   constructor(private readonly paymentService: PaymentService) {}
 
   @GrpcMethod('PaymentService')
-  makePayment(
-    request: PaymentMicroService.MakePaymentRequest,
-    metadata: Metadata,
-  ) {
+  makePayment(request: PaymentMicroService.MakePaymentRequest) {
     return this.paymentService.makePayment({
       ...request,
       paymentMethod: request.paymentMethod as PaymentMethod,
