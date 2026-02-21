@@ -1,12 +1,20 @@
 import { Module } from '@nestjs/common';
-import { PaymentController } from './payment.controller';
-import { PaymentService } from './payment.service';
+import { PaymentController } from './adapter/input/payment.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Payment } from './entity/payment.entity';
+import { PaymentEntity } from './adapter/output/typeorm/entity/payment.entity';
+import { PaymentService } from './application/payment.service';
+import { TypeOrmAdapter } from './adapter/output/typeorm/typeorm.adapter';
+import { PortOneAdapter } from './adapter/output/portone/portone.adapter';
+import { GrpcAdapter } from './adapter/output/grpc/grpc.adapter';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Payment])],
+  imports: [TypeOrmModule.forFeature([PaymentEntity])],
   controllers: [PaymentController],
-  providers: [PaymentService],
+  providers: [
+    PaymentService,
+    { provide: 'DatabaseOutputPort', useClass: TypeOrmAdapter },
+    { provide: 'PaymentOutputPort', useClass: PortOneAdapter },
+    { provide: 'NetworkOutputPort', useClass: GrpcAdapter },
+  ],
 })
 export class PaymentModule {}

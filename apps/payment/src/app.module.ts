@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import * as Joi from 'joi';
-import { PaymentModule } from './payment/payment.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import {
   NOTIFICATION_SERVICE,
@@ -10,6 +8,7 @@ import {
   traceInterceptor,
 } from '@app/common';
 import { join } from 'path';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -27,9 +26,9 @@ import { join } from 'path';
         database: configService.getOrThrow('DB_NAME'),
         autoLoadEntities: true,
         synchronize: true,
-        ssl: {
-          rejectUnauthorized: false,
-        },
+        // ssl: {
+        //   rejectUnauthorized: false,
+        // },
       }),
       inject: [ConfigService],
     }),
