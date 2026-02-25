@@ -29,7 +29,7 @@ export class GrpcInterceptor implements NestInterceptor {
       timestamp: requestTimestamp.toUTCString(),
     };
 
-    console.log(receivedRequestLog);
+    console.log(JSON.stringify(receivedRequestLog));
 
     return next.handle().pipe(
       map((data) => {
@@ -44,7 +44,7 @@ export class GrpcInterceptor implements NestInterceptor {
           responseTime,
           timestamp: responseTimestamp.toUTCString(),
         };
-        console.log(responseLog);
+        console.log(JSON.stringify(responseLog));
         return data;
       }),
     );
