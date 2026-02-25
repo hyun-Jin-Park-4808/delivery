@@ -1,15 +1,14 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import * as Joi from 'joi';
-import { MongooseModule } from '@nestjs/mongoose';
-import { NotificationModule } from './notification/notification.module';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 import {
   ORDER_SERVICE,
   OrderMicroService,
   traceInterceptor,
 } from '@app/common';
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { MongooseModule } from '@nestjs/mongoose';
 import { join } from 'path';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -39,6 +38,21 @@ import { join } from 'path';
             },
           }),
           inject: [ConfigService],
+        },
+        {
+          name: 'KAFKA_SERVICE',
+          useFactory: () => ({
+            transport: Transport.KAFKA,
+            options: {
+              client: {
+                clientId: 'notification',
+                brokers: ['kafka:9092'],
+              },
+              consumer: {
+                groupId: 'notification-consumer',
+              },
+            },
+          }),
         },
       ],
       isGlobal: true,
